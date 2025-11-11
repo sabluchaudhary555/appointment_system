@@ -1,14 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, AuthState } from '../types';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 
-interface AuthContextType extends AuthState {
-  login: (email: string, password: string, role: 'patient' | 'doctor') => Promise<boolean>;
-  register: (userData: Partial<User> & { password: string }) => Promise<boolean>;
-  logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -18,22 +11,17 @@ export const useAuth = () => {
   return context;
 };
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [authState, setAuthState] = useState<AuthState>({
+export const AuthProvider = ({ children }) => {
+  const [authState, setAuthState] = useState({
     user: null,
     isAuthenticated: false,
     loading: true,
   });
 
   useEffect(() => {
-    // Check for stored user data on app initialization
     const storedUser = localStorage.getItem('user');
     const storedToken = localStorage.getItem('token');
-    
+
     if (storedUser && storedToken) {
       const user = JSON.parse(storedUser);
       setAuthState({
@@ -46,14 +34,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const login = async (email: string, password: string, role: 'patient' | 'doctor'): Promise<boolean> => {
+  const login = async (email, password, role) => {
     try {
       const response = await authAPI.login(email, password, role);
       const { user, token } = response.data;
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', token);
-      
+
       setAuthState({
         user,
         isAuthenticated: true,
@@ -66,14 +54,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (userData: Partial<User> & { password: string }): Promise<boolean> => {
+  const register = async (userData) => {
     try {
       const response = await authAPI.register(userData);
       const { user, token } = response.data;
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', token);
-      
+
       setAuthState({
         user,
         isAuthenticated: true,

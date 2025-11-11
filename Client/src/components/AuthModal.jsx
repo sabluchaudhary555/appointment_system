@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { X, User, Mail, Lock, Phone, Stethoscope, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-interface AuthModalProps {
-  isOpen: boolean;
-  mode: 'signin' | 'signup';
-  onClose: () => void;
-}
-
-const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
-  const [selectedRole, setSelectedRole] = useState<'patient' | 'doctor'>('patient');
+const AuthModal = ({ isOpen, mode, onClose }) => {
+  const [selectedRole, setSelectedRole] = useState('patient');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,7 +16,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
 
   const { login, register } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -33,12 +27,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
       if (mode === 'signin') {
         success = await login(formData.email, formData.password, selectedRole);
       } else {
-        const userPayload: any = {
+        const userPayload = {
           ...formData,
           role: selectedRole,
         };
 
-        // Remove empty specialization if not a doctor
         if (selectedRole !== 'doctor') {
           delete userPayload.specialization;
         }
@@ -58,7 +51,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -70,7 +63,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        {/* Header */}
         <div className="p-6 border-b border-gray-200 relative">
           <button
             onClick={onClose}
@@ -87,13 +79,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
         </div>
 
         <div className="p-6">
-          {/* Role Selection */}
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
               I am a...
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
-              {/* Patient Option */}
               <button
                 type="button"
                 onClick={() => setSelectedRole('patient')}
@@ -118,7 +108,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
                 </div>
               </button>
 
-              {/* Doctor Option */}
               <button
                 type="button"
                 onClick={() => setSelectedRole('doctor')}
@@ -145,7 +134,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, mode, onClose }) => {
             </div>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">

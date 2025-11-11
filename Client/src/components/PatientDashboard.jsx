@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, User, MapPin, Star, Search, Filter, Plus, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Doctor, Appointment } from '../types';
 import { doctorsAPI, appointmentsAPI } from '../services/api';
 
-const PatientDashboard: React.FC = () => {
+const PatientDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'appointments' | 'doctors' | 'profile'>('appointments');
+  const [activeTab, setActiveTab] = useState('appointments');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [doctors, setDoctors] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [bookingForm, setBookingForm] = useState({
     date: '',
     time: '',
@@ -43,28 +42,27 @@ const PatientDashboard: React.FC = () => {
     }
   };
 
-  const handleBookAppointment = (doctor: Doctor) => {
+  const handleBookAppointment = (doctor) => {
     setSelectedDoctor(doctor);
     setShowBookingModal(true);
   };
 
-  const handleSubmitBooking = async (e: React.FormEvent) => {
+  const handleSubmitBooking = async (e) => {
   e.preventDefault();
   if (!selectedDoctor) return;
 
   setLoading(true);
 try {
   const payload = {
-    doctor: selectedDoctor._id, //  correct key name
+    doctor: selectedDoctor._id,
     date: new Date(bookingForm.date).toISOString(),
     time: bookingForm.time,
     reason: bookingForm.reason,
   };
 
-  console.log('Booking Payload:', payload); // Debug log
+  console.log('Booking Payload:', payload);
 
   await appointmentsAPI.createAppointment(payload);
-  // ...rest of the code
     setShowBookingModal(false);
     setBookingForm({ date: '', time: '', reason: '' });
     fetchAppointments();
@@ -94,13 +92,11 @@ try {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
         <p className="text-gray-600 mt-2">Manage your appointments and find the best doctors</p>
       </div>
 
-      {/* Navigation Tabs */}
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg mb-8">
         {[
           { key: 'appointments', label: 'My Appointments', icon: Calendar },
@@ -111,7 +107,7 @@ try {
           return (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-colors ${
                 activeTab === tab.key
                   ? 'bg-white text-blue-600 shadow-sm'
@@ -125,12 +121,11 @@ try {
         })}
       </div>
 
-      {/* Content */}
       {activeTab === 'appointments' && (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-gray-900">My Appointments</h2>
-            <button 
+            <button
               onClick={() => setActiveTab('doctors')}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
             >
@@ -145,7 +140,7 @@ try {
                 <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No appointments yet</h3>
                 <p className="text-gray-600 mb-4">Book your first appointment with our expert doctors</p>
-                <button 
+                <button
                   onClick={() => setActiveTab('doctors')}
                   className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                 >
@@ -200,8 +195,7 @@ try {
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Find Doctors</h2>
-            
-            {/* Search and Filter */}
+
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -229,7 +223,6 @@ try {
             </div>
           </div>
 
-          {/* Doctors Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredDoctors.map(doctor => (
               <div key={doctor.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
@@ -242,7 +235,7 @@ try {
                     <p className="text-teal-600 font-medium">{doctor.specialization}</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center space-x-2 text-gray-600">
                     <MapPin className="h-4 w-4" />
@@ -253,12 +246,12 @@ try {
                     <span className="text-sm">{doctor.rating} ({doctor.experience} years exp.)</span>
                   </div>
                 </div>
-                
+
                 <p className="text-gray-600 text-sm mb-4">{doctor.about}</p>
-                
+
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-gray-900">${doctor.fee}</span>
-                  <button 
+                  <button
                     onClick={() => handleBookAppointment(doctor)}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                   >
@@ -274,7 +267,7 @@ try {
       {activeTab === 'profile' && (
         <div className="max-w-2xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Settings</h2>
-          
+
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="space-y-6">
               <div className="flex items-center space-x-6">
@@ -287,7 +280,7 @@ try {
                   <p className="text-sm text-gray-500 capitalize">{user?.role} Account</p>
                 </div>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -329,7 +322,7 @@ try {
                   />
                 </div>
               </div>
-              
+
               <div className="flex justify-end">
                 <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
                   Save Changes
@@ -340,7 +333,6 @@ try {
         </div>
       )}
 
-      {/* Booking Modal */}
       {showBookingModal && selectedDoctor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
@@ -356,7 +348,7 @@ try {
               </div>
               <p className="text-gray-600 mt-1">with {selectedDoctor.name}</p>
             </div>
-            
+
             <form onSubmit={handleSubmitBooking} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -371,7 +363,7 @@ try {
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Preferred Time
@@ -388,7 +380,7 @@ try {
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Reason for Visit
@@ -402,7 +394,7 @@ try {
                   required
                 />
               </div>
-              
+
               <div className="flex space-x-3 pt-4">
                 <button
                   type="button"

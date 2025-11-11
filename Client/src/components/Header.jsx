@@ -3,12 +3,12 @@ import { Menu, X, User, Calendar, Stethoscope, LogOut, Home, Phone, Mail } from 
 import { useAuth } from '../context/AuthContext';
 import AuthModal from './AuthModal';
 
-const Header: React.FC = () => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: 'signin' | 'signup' } | null>(null);
+  const [authModal, setAuthModal] = useState(null);
   const { user, isAuthenticated, logout } = useAuth();
 
-  const handleAuthClick = (mode: 'signin' | 'signup') => {
+  const handleAuthClick = (mode) => {
     setAuthModal({ isOpen: true, mode });
     setIsMenuOpen(false);
   };
@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     setIsMenuOpen(false);
   };
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -31,7 +31,6 @@ const Header: React.FC = () => {
       <header className="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* Logo */}
             <div className="flex items-center space-x-2 cursor-pointer" onClick={() => scrollToSection('home')}>
               <div className="bg-blue-600 p-2 rounded-lg">
                 <Stethoscope className="h-6 w-6 text-white" />
@@ -39,7 +38,6 @@ const Header: React.FC = () => {
               <span className="text-2xl font-bold text-gray-900">EternityCare</span>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {isAuthenticated ? (
                 <>
@@ -113,7 +111,6 @@ const Header: React.FC = () => {
               )}
             </nav>
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -122,7 +119,6 @@ const Header: React.FC = () => {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
           {isMenuOpen && (
             <div className="md:hidden pb-4 border-t border-gray-100 mt-4 pt-4">
               {isAuthenticated ? (
@@ -200,7 +196,6 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-      {/* Auth Modal */}
       {authModal && (
         <AuthModal
           isOpen={authModal.isOpen}

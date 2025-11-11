@@ -7,11 +7,10 @@ import AuthModal from './components/AuthModal';
 
 function AppContent() {
   const { isAuthenticated, loading } = useAuth();
-  const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: 'signin' | 'signup' } | null>(null);
+  const [authModal, setAuthModal] = useState(null);
 
   const handleBookAppointment = () => {
     if (isAuthenticated) {
-      // Scroll to dashboard or switch to doctors tab
       const dashboardElement = document.getElementById('dashboard');
       if (dashboardElement) {
         dashboardElement.scrollIntoView({ behavior: 'smooth' });
@@ -23,7 +22,6 @@ function AppContent() {
 
   const handleFindDoctors = () => {
     if (isAuthenticated) {
-      // Scroll to dashboard or switch to doctors tab
       const dashboardElement = document.getElementById('dashboard');
       if (dashboardElement) {
         dashboardElement.scrollIntoView({ behavior: 'smooth' });
@@ -49,13 +47,12 @@ function AppContent() {
           <Dashboard />
         </div>
       ) : (
-        <LandingPage 
+        <LandingPage
           onBookAppointment={handleBookAppointment}
           onFindDoctors={handleFindDoctors}
         />
       )}
-      
-      {/* Auth Modal */}
+
       {authModal && (
         <AuthModal
           isOpen={authModal.isOpen}

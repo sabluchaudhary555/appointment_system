@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, User, Phone, Mail, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Appointment } from '../types';
 import {  appointmentsAPI } from '../services/api';
 
 
-const DoctorDashboard: React.FC = () => {
+const DoctorDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'appointments' | 'schedule' | 'profile'>('appointments');
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [activeTab, setActiveTab] = useState('appointments');
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,7 +18,7 @@ const fetchAppointments = async () => {
   try {
     const response = await appointmentsAPI.getAppointments();
 
-    const mappedAppointments = response.data.map((apt: any) => ({
+    const mappedAppointments = response.data.map((apt) => ({
       ...apt,
       id: apt._id,
       patient: {
@@ -39,21 +38,20 @@ const fetchAppointments = async () => {
 };
 
 
-  const handleAppointmentAction = async (appointmentId: string, action: 'approve' | 'reject') => {
+  const handleAppointmentAction = async (appointmentId, action) => {
     setLoading(true);
     try {
       const status = action === 'approve' ? 'scheduled' : 'cancelled';
       await appointmentsAPI.updateAppointmentStatus(appointmentId, status);
-      
-      // Update local state
-      setAppointments(prev => 
-        prev.map(apt => 
-          apt.id === appointmentId 
-            ? { ...apt, status: status as any }
+
+      setAppointments(prev =>
+        prev.map(apt =>
+          apt.id === appointmentId
+            ? { ...apt, status: status }
             : apt
         )
       );
-      
+
       alert(`Appointment ${action === 'approve' ? 'approved' : 'rejected'} successfully!`);
     } catch (error) {
       console.error(`Error ${action}ing appointment:`, error);
@@ -75,13 +73,11 @@ const fetchAppointments = async () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Welcome, Dr. {user?.name?.split(' ').pop()}!</h1>
         <p className="text-gray-600 mt-2">Manage your appointments and patient care</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
@@ -123,7 +119,6 @@ const fetchAppointments = async () => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg mb-8">
         {[
           { key: 'appointments', label: 'Appointments', icon: Calendar },
@@ -134,7 +129,7 @@ const fetchAppointments = async () => {
           return (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-colors ${
                 activeTab === tab.key
                   ? 'bg-white text-teal-600 shadow-sm'
@@ -148,10 +143,8 @@ const fetchAppointments = async () => {
         })}
       </div>
 
-      {/* Content */}
       {activeTab === 'appointments' && (
         <div className="space-y-6">
-          {/* Pending Appointments */}
           {pendingAppointments.length > 0 && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Pending Approval</h2>
@@ -213,7 +206,6 @@ const fetchAppointments = async () => {
             </div>
           )}
 
-          {/* Today's Appointments */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Today's Appointments</h2>
             <div className="grid gap-4">
@@ -272,7 +264,6 @@ const fetchAppointments = async () => {
             </div>
           </div>
 
-          {/* Upcoming Appointments */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Upcoming Appointments</h2>
             <div className="grid gap-4">
@@ -318,7 +309,7 @@ const fetchAppointments = async () => {
       {activeTab === 'profile' && (
         <div className="max-w-2xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Doctor Profile</h2>
-          
+
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="space-y-6">
               <div className="flex items-center space-x-6">
@@ -331,7 +322,7 @@ const fetchAppointments = async () => {
                   <p className="text-sm text-gray-500">Doctor Account</p>
                 </div>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -375,7 +366,7 @@ const fetchAppointments = async () => {
                   </select>
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   About
@@ -386,7 +377,7 @@ const fetchAppointments = async () => {
                   placeholder="Tell patients about your experience and expertise..."
                 />
               </div>
-              
+
               <div className="flex justify-end">
                 <button className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors">
                   Save Changes

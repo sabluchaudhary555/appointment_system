@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://medical-app-7x4y.onrender.com';
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Add token to requests
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -19,37 +17,34 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth API
 export const authAPI = {
-  login: (email: string, password: string, role: 'doctor' | 'patient'): Promise<any> =>
+  login: (email, password, role) =>
     api.post('/api/auth/login', { email, password, role }),
 
-  register: (userData: { name: string; email: string; password: string; role: 'doctor' | 'patient' }): Promise<any> =>
+  register: (userData) =>
     api.post('/api/auth/register', userData),
 };
 
 
-// Appointments API
 export const appointmentsAPI = {
   getAppointments: () => api.get('/api/appointments'),
 
- createAppointment: (appointmentData: any): Promise<any> =>
+ createAppointment: (appointmentData) =>
   api.post('/api/appointments', appointmentData),
 
 
-updateAppointmentStatus: (id: string, status: string): Promise<any> =>
+updateAppointmentStatus: (id, status) =>
   api.patch(`/api/appointments/${id}/status`, { status }),
 
 };
 
-// Doctors API
 export const doctorsAPI = {
   getDoctors: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
     return api.get(`/api/doctors${queryString ? `?${queryString}` : ''}`);
   },
 
-getDoctorById: (id: string): Promise<any> =>
+getDoctorById: (id) =>
   api.get(`/api/doctors/${id}`),
 
 };

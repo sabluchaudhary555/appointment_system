@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import PatientDashboard from './PatientDashboard';
 import DoctorDashboard from './DoctorDashboard';
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const { user } = useAuth();
 
   if (!user) {

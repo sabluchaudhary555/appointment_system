@@ -2,12 +2,7 @@ import React from 'react';
 import { Calendar, Clock, Shield, Star, Users, Heart, ArrowRight, Phone, Mail, MapPin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-interface LandingPageProps {
-  onBookAppointment: () => void;
-  onFindDoctors: () => void;
-}
-
-const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoctors }) => {
+const LandingPage = ({ onBookAppointment, onFindDoctors }) => {
   const { isAuthenticated } = useAuth();
 
   const features = [
@@ -66,7 +61,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
       <section id="home" className="bg-gradient-to-br from-blue-50 via-white to-teal-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -78,18 +72,18 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
                 </span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Connect with top-rated doctors, book appointments instantly, and manage your healthcare 
+                Connect with top-rated doctors, book appointments instantly, and manage your healthcare
                 journey all in one place. Quality care is just a click away.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button 
+                <button
                   onClick={onBookAppointment}
                   className="bg-blue-600 text-white px-8 py-4 rounded-xl font-medium hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
                 >
                   <Calendar className="h-5 w-5" />
                   <span>Book Appointment</span>
                 </button>
-                <button 
+                <button
                   onClick={onFindDoctors}
                   className="border border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-medium hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
                 >
@@ -114,7 +108,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
         </div>
       </section>
 
-      {/* Stats Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -128,7 +121,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
         </div>
       </section>
 
-      {/* Features Section */}
       <section id="features" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -136,11 +128,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
               Why Choose EternityCare?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We're revolutionizing healthcare access with cutting-edge technology and 
+              We're revolutionizing healthcare access with cutting-edge technology and
               compassionate care.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon;
@@ -158,7 +150,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
         </div>
       </section>
 
-      {/* Doctors Section */}
       <section id="doctors" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -166,11 +157,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
               Meet Our Expert Doctors
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our team of experienced healthcare professionals is here to provide 
+              Our team of experienced healthcare professionals is here to provide
               you with the best possible care.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {doctors.map((doctor, index) => (
               <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
@@ -189,7 +180,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
                     </div>
                     <span className="text-sm text-gray-600">{doctor.experience}</span>
                   </div>
-                  <button 
+                  <button
                     onClick={onBookAppointment}
                     className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
                   >
@@ -202,17 +193,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-teal-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-4">
             Ready to Start Your Healthcare Journey?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of patients who trust EternityCare for their healthcare needs. 
+            Join thousands of patients who trust EternityCare for their healthcare needs.
             Book your first appointment today.
           </p>
-          <button 
+          <button
             onClick={onBookAppointment}
             className="bg-white text-blue-600 px-8 py-4 rounded-xl font-medium hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
           >
@@ -222,7 +212,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
         </div>
       </section>
 
-      {/* Contact Section */}
       <section id="contact" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -233,7 +222,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
               Have questions? We're here to help. Contact us through any of the following methods.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -243,7 +232,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
               <p className="text-gray-600 mb-2">Available 24/7 for emergencies</p>
               <p className="text-blue-600 font-medium">+910123456789</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Mail className="h-8 w-8 text-blue-600" />
@@ -252,7 +241,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
               <p className="text-gray-600 mb-2">We'll respond within 24 hours</p>
               <p className="text-blue-600 font-medium">support@EternityCare.com</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <MapPin className="h-8 w-8 text-blue-600" />
@@ -265,7 +254,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
@@ -277,11 +265,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
                 <span className="text-2xl font-bold">EternityCare</span>
               </div>
               <p className="text-gray-400">
-                Your trusted partner in healthcare, providing quality medical services 
+                Your trusted partner in healthcare, providing quality medical services
                 and connecting you with the best doctors.
               </p>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2 text-gray-400">
@@ -291,7 +279,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
                 <li><a href="#contact" className="hover:text-white transition-colors"></a></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
@@ -301,7 +289,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
                 <li><a href="#" className="hover:text-white transition-colors"></a></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
               <div className="space-y-3 text-gray-400">
@@ -320,7 +308,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onBookAppointment, onFindDoct
               </div>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>&copy; 2024 EternityCare. All rights reserved.</p>
           </div>
